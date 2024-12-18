@@ -6,6 +6,7 @@ import * as prismic from "@prismicio/client";
 
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
+import { linkResolver } from "@/linkResolver";
 
 export const dynamicParams = false;
 
@@ -45,6 +46,8 @@ export async function generateStaticParams() {
   const pages = await client.getAllByType("page");
 
   return pages.map((page) => {
-    return { pagePath: page.url?.split("/").slice(1) };
+    return {
+      pagePath: prismic.asLink(page, { linkResolver })?.split("/").slice(1),
+    };
   });
 }
